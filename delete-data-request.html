@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Request Data Deletion — Book My Barber</title>
+  <style>
+    :root{
+      --bg:#f6f8fb; --card:#ffffff; --muted:#6b7280; --accent:#0b1220;
+      --pad:18px; --radius:10px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    }
+    body{background:var(--bg); margin:0; color:var(--accent); padding:28px; line-height:1.5;}
+    .container{max-width:760px; margin:0 auto;}
+    .card{background:var(--card); border-radius:var(--radius); padding:var(--pad); box-shadow:0 6px 20px rgba(11,18,32,0.06);}
+    h1{margin:0 0 6px; font-size:24px;}
+    p.lead{color:var(--muted); margin-top:0;}
+    label{display:block; margin-top:12px; font-weight:600;}
+    input[type="text"], input[type="email"], textarea, select{
+      width:100%; padding:10px; margin-top:6px; border-radius:8px; border:1px solid #e6e9ef;
+      box-sizing:border-box; font-size:14px;
+    }
+    textarea{min-height:100px; resize:vertical;}
+    .row{display:flex; gap:12px; flex-wrap:wrap;}
+    .col{flex:1 1 220px;}
+    .small{font-size:13px; color:var(--muted);}
+    .actions{margin-top:16px; display:flex; gap:10px; align-items:center;}
+    button{background:#0b5cff;color:#fff;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600;}
+    button:disabled{opacity:0.6; cursor:not-allowed;}
+    .notice{background:#fff8f3;border-left:4px solid #ff9f43;padding:10px;border-radius:8px;margin-top:12px;}
+    .success{background:#ecfbf0;border-left:4px solid #10b981;padding:10px;border-radius:8px;margin-top:12px; display:none;}
+    footer{margin-top:18px; color:var(--muted); font-size:13px;}
+    a.inline{color:inherit;text-decoration:underline}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card" role="main" aria-labelledby="pageTitle">
+      <h1 id="pageTitle">Request Personal Data Deletion</h1>
+      <p class="lead">To request deletion of data associated with the email <strong>deepaksoftware98@gmail.com</strong>, please complete the form below and click <strong>Send Deletion Request</strong>. This will open your default email client with a pre-filled message to our data team.</p>
+
+      <div class="notice">
+        <strong>Important:</strong> For your security we may ask for additional verification before deleting account data (e.g., confirmation email, a code sent to the account). We will only use verification information to confirm your identity and process your request.
+      </div>
+
+      <form id="deleteForm" onsubmit="return buildAndOpenMailto();">
+        <label for="requesterEmail">Your contact email (required)</label>
+        <input type="email" id="requesterEmail" name="requesterEmail" required placeholder="you@example.com" value="">
+
+        <div class="row">
+          <div class="col">
+            <label for="fullName">Full name (optional)</label>
+            <input type="text" id="fullName" name="fullName" placeholder="Your full name">
+          </div>
+          <div class="col">
+            <label for="accountId">Account / Booking ID (optional)</label>
+            <input type="text" id="accountId" name="accountId" placeholder="If you have an account or booking ID">
+          </div>
+        </div>
+
+        <label for="reason">Reason for deletion (optional)</label>
+        <textarea id="reason" name="reason" placeholder="Tell us why you want your data deleted (helps us improve)"></textarea>
+
+        <label for="preferredDate">Preferred deletion date (optional)</label>
+        <input type="text" id="preferredDate" name="preferredDate" placeholder="e.g., As soon as possible / 2025-09-20">
+
+        <p class="small">By submitting this request you confirm you own or have authority to act on behalf of the account identified above. We may contact you at the email you provide to confirm identity and complete the deletion.</p>
+
+        <label style="margin-top:10px;">
+          <input type="checkbox" id="confirmCheckbox" required>
+          <span class="small">I confirm that I request deletion of personal data associated with <strong>deepaksoftware98@gmail.com</strong>.</span>
+        </label>
+
+        <div class="actions">
+          <button type="submit" id="sendBtn">Send Deletion Request</button>
+          <button type="button" id="clearBtn" onclick="clearForm()">Clear</button>
+        </div>
+      </form>
+
+      <div id="success" class="success" role="status" aria-live="polite">
+        <strong>Mail client opened.</strong> If your email client did not open, please use the manual template below.
+      </div>
+
+      <h2 style="margin-top:18px;font-size:16px;">Manual email template (copy-paste)</h2>
+      <p class="small">If your email client does not open, send an email to <a class="inline" href="mailto:deepaksoftware98@gmail.com">deepaksoftware98@gmail.com</a> with the subject and body below.</p>
+
+      <pre style="background:#f3f6fb;padding:12px;border-radius:8px;border:1px solid #e6e9ef;white-space:pre-wrap;">
+To: deepaksoftware98@gmail.com
+Subject: Data Deletion Request — deepaksoftware98@gmail.com
+
+Hello,
+
+I request deletion of all personal data associated with the email: deepaksoftware98@gmail.com
+
+Name: [Your full name]
+Contact email: [Your contact email]
+Account / Booking ID (if any): [ID]
+Reason (optional): [Why you request deletion]
+
+Please confirm the next steps and any verification required.
+
+Thank you,
+[Your name]
+      </pre>
+
+      <footer>
+        <div class="small">We will only use the information you provide to verify and process your deletion request. See our <a href="salon_privacy_policy.html" class="inline">Privacy Policy</a> for more details.</div>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // Target recipient (fixed)
+    const recipient = "deepaksoftware98@gmail.com";
+
+    function buildAndOpenMailto() {
+      const requesterEmail = document.getElementById("requesterEmail").value.trim();
+      const fullName = document.getElementById("fullName").value.trim();
+      const accountId = document.getElementById("accountId").value.trim();
+      const reason = document.getElementById("reason").value.trim();
+      const preferredDate = document.getElementById("preferredDate").value.trim();
+      const confirm = document.getElementById("confirmCheckbox").checked;
+
+      if (!requesterEmail || !confirm) {
+        alert("Please provide your contact email and confirm the request.");
+        return false;
+      }
+
+      const subject = encodeURIComponent("Data Deletion Request — " + "deepaksoftware98@gmail.com");
+      let body = "Hello,%0D%0A%0D%0AI request deletion of all personal data associated with the email: deepaksoftware98@gmail.com%0D%0A%0D%0A";
+      body += "Name: " + encodeURIComponent(fullName || "[Not provided]") + "%0D%0A";
+      body += "Contact email: " + encodeURIComponent(requesterEmail) + "%0D%0A";
+      body += "Account / Booking ID: " + encodeURIComponent(accountId || "[Not provided]") + "%0D%0A";
+      body += "Preferred deletion date: " + encodeURIComponent(preferredDate || "[No preference]") + "%0D%0A%0D%0A";
+      body += "Reason (optional): " + encodeURIComponent(reason || "[Not provided]") + "%0D%0A%0D%0A";
+      body += "Please confirm the next steps and any verification required.%0D%0A%0D%0AThank you,%0D%0A" + encodeURIComponent(fullName || "[Name]");
+
+      // Build mailto link
+      const mailtoLink = `mailto:${recipient}?subject=${subject}&body=${body}`;
+
+      // Attempt to open user's mail client
+      window.location.href = mailtoLink;
+
+      // Show simple success indicator
+      const success = document.getElementById("success");
+      success.style.display = "block";
+
+      return false; // prevent default form submission
+    }
+
+    function clearForm(){
+      document.getElementById("deleteForm").reset();
+      document.getElementById("success").style.display = "none";
+    }
+  </script>
+</body>
+</html>
